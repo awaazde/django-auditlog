@@ -92,6 +92,7 @@ class AuditlogMiddleware(MiddlewareMixin):
                 and isinstance(user, auth_user_model)
                 and instance.actor is None
             ):
-                instance.actor = user
+                if auth_user_model.objects.filter(pk=user.pk).exists():
+                    instance.actor = user
 
             instance.remote_addr = threadlocal.auditlog["remote_addr"]
